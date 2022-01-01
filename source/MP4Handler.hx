@@ -19,8 +19,6 @@ class MP4Handler
 
 	public var bitmap:VlcBitmap;
 
-	var killed:Bool = false;
-
 	public var sprite:FlxSprite;
 
 	public function new()

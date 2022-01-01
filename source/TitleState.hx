@@ -48,6 +48,11 @@ class TitleState extends MusicBeatState
 
 	override public function create():Void
 	{
+		
+		#if android
+		FlxG.android.preventDefaultKeys = [BACK];
+		#end
+			
 		MasterObjectLoader.mutex = new Mutex();
 		// TODO: Refactor this to use OpenFlAssets.
 		#if FEATURE_FILESYSTEM

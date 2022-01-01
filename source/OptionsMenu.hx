@@ -17,6 +17,7 @@ import flixel.input.keyboard.FlxKey;
 import flixel.math.FlxMath;
 import flixel.text.FlxText;
 import flixel.util.FlxColor;
+import ui.FlxVirtualPad;
 
 class OptionCata extends FlxSprite
 {
@@ -118,6 +119,7 @@ class OptionsMenu extends FlxSubState
 	{
 		options = [
 			new OptionCata(50, 40, "Gameplay", [
+				new MobileControls("Edit mobile controls."),
 				new ScrollSpeedOption("Change your scroll speed. (1 = Chart dependent)"),
 				new OffsetThing("Change the note visual offset (how many milliseconds a note looks like it is offset in a chart)"),
 				new MOffsetThing("Change the note audio offset (how many milliseconds a note is offset in a chart)"),
@@ -214,7 +216,7 @@ class OptionsMenu extends FlxSubState
 		selectedCat = options[0];
 
 		selectedOption = selectedCat.options[0];
-
+		
 		add(menu);
 
 		add(shownStuff);
@@ -240,6 +242,10 @@ class OptionsMenu extends FlxSubState
 		switchCat(selectedCat);
 
 		selectedOption = selectedCat.options[0];
+		
+		_pad = new FlxVirtualPad(FULL, A_B);
+		_pad.alpha = 0.75;
+		add(_pad);
 
 		super.create();
 	}

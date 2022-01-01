@@ -20,8 +20,6 @@ class Note extends FlxSprite
 
 	public var charterSelected:Bool = false;
 
-	public var LuaNote:LuaNote;
-
 	public var rStrumTime:Float = 0;
 
 	public var mustPress:Bool = false;

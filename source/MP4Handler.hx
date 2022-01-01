@@ -19,8 +19,6 @@ class MP4Handler
 
 	public var bitmap:VlcBitmap;
 
-	var killed:Bool = false;
-
 	public var sprite:FlxSprite;
 
 	public function new()
@@ -51,6 +49,8 @@ class MP4Handler
 			bitmap.set_width(FlxG.stage.stageWidth);
 			bitmap.set_height(FlxG.stage.stageWidth / (16 / 9));
 		}
+		
+		
 
 		bitmap.onVideoReady = onVLCVideoReady;
 		bitmap.onComplete = onVLCComplete;
@@ -176,6 +176,14 @@ class MP4Handler
 
 	function update(e:Event)
 	{
+		if (FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.SPACE)
+		{
+			if (bitmap.isPlaying)
+			{
+				onVLCComplete();
+			}
+		}
+		
 		bitmap.volume = FlxG.sound.volume + 0.3; // shitty volume fix. then make it louder.
 
 		if (FlxG.sound.volume <= 0.1)

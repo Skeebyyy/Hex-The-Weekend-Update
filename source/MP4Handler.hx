@@ -29,8 +29,6 @@ class MP4Handler
 	public function playMP4(path:String, ?repeat:Bool = false, ?outputTo:FlxSprite = null, ?isWindow:Bool = false, ?isFullscreen:Bool = false,
 			?midSong:Bool = false):Void
 	{
-		if (killed)
-			return;
 		if (!midSong)
 		{
 			if (FlxG.sound.music != null)
@@ -95,8 +93,6 @@ class MP4Handler
 
 	function onVLCVideoReady()
 	{
-		if (killed)
-			return;
 		Debug.logTrace("video loaded!");
 
 		if (sprite != null && !bitmap.isDisposed && bitmap.bitmapData != null)
@@ -126,8 +122,6 @@ class MP4Handler
 
 	public function onVLCComplete()
 	{
-		if (killed)
-			return;
 		bitmap.stop();
 
 		// Clean player, just in case! Actually no.
@@ -156,7 +150,6 @@ class MP4Handler
 
 	public function kill()
 	{
-		killed = true;
 		bitmap.stop();
 
 		if (finishCallback != null)
@@ -169,8 +162,6 @@ class MP4Handler
 
 	function onVLCError()
 	{
-		if (killed)
-			return;
 		if (finishCallback != null)
 		{
 			finishCallback();
@@ -183,8 +174,15 @@ class MP4Handler
 
 	function update(e:Event)
 	{
-		if (killed)
-			return;
+		
+		if (FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.SPACE)
+		{
+			if (bitmap.isPlaying)
+			{
+				onVLCComplete();
+			}
+		}
+		
 		bitmap.volume = FlxG.sound.volume + 0.3; // shitty volume fix. then make it louder.
 
 		if (FlxG.sound.volume <= 0.1)

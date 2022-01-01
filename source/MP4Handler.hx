@@ -1,6 +1,5 @@
 package;
 
-import flixel.graphics.FlxGraphic;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.FlxState;
@@ -11,7 +10,6 @@ import vlc.VlcBitmap;
 
 // THIS IS FOR TESTING
 // DONT STEAL MY CODE >:(
-// I stole it
 class MP4Handler
 {
 	public var finishCallback:Void->Void;
@@ -23,7 +21,7 @@ class MP4Handler
 
 	public function new()
 	{
-		// FlxG.autoPause = false;
+		//FlxG.autoPause = false;
 	}
 
 	public function playMP4(path:String, ?repeat:Bool = false, ?outputTo:FlxSprite = null, ?isWindow:Bool = false, ?isFullscreen:Bool = false,
@@ -50,6 +48,8 @@ class MP4Handler
 			bitmap.set_height(FlxG.stage.stageWidth / (16 / 9));
 		}
 
+		
+
 		bitmap.onVideoReady = onVLCVideoReady;
 		bitmap.onComplete = onVLCComplete;
 		bitmap.onError = onVLCError;
@@ -57,7 +57,7 @@ class MP4Handler
 		FlxG.stage.addEventListener(Event.ENTER_FRAME, update);
 
 		if (repeat)
-			bitmap.repeat = -1;
+			bitmap.repeat = -1; 
 		else
 			bitmap.repeat = 0;
 
@@ -79,7 +79,7 @@ class MP4Handler
 	function checkFile(fileName:String):String
 	{
 		var pDir = "";
-		var appDir = "file:///" + Sys.getCwd();
+		var appDir = "file:///" + Sys.getCwd() + "/";
 
 		if (fileName.indexOf(":") == -1) // Not a path
 			pDir = appDir;
@@ -93,31 +93,10 @@ class MP4Handler
 
 	function onVLCVideoReady()
 	{
-		Debug.logTrace("video loaded!");
+		trace("video loaded!");
 
-		if (sprite != null && !bitmap.isDisposed && bitmap.bitmapData != null)
-		{
-			var graph:FlxGraphic = FlxG.bitmap.add(bitmap.bitmapData, false, "");
-
-			Debug.logTrace(graph.imageFrame);
-
-			// super fucking weird behavoir where this just breaks when leaving cooling, something cuz of somethin ig.
-			// fixed cuz of these statements.
-
-			if (graph.imageFrame.frame == null)
-				return;
-
-			if (graph.imageFrame.frame.name == null)
-			{
-				if (killed || PauseSubState.FUCKINGDONTDOITVLCMEDIAPLAYERISWEARTOGOD)
-					return;
-			}
-
-			Debug.logTrace("here is your graphic big man " + bitmap.videoWidth + "x" + bitmap.videoHeight + " " + bitmap.bitmapData.height);
-			sprite.loadGraphic(graph);
-
-			sprite.setGraphicSize(945, 472);
-		}
+		if (sprite != null)
+			sprite.loadGraphic(bitmap.bitmapData);
 	}
 
 	public function onVLCComplete()
@@ -126,7 +105,9 @@ class MP4Handler
 
 		// Clean player, just in case! Actually no.
 
-		Debug.logTrace("Big, Big Chungus, Big Chungus!");
+		FlxG.camera.fade(FlxColor.BLACK, 0, false);
+
+		trace("Big, Big Chungus, Big Chungus!");
 
 		new FlxTimer().start(0.3, function(tmr:FlxTimer)
 		{
@@ -174,7 +155,6 @@ class MP4Handler
 
 	function update(e:Event)
 	{
-		
 		if (FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.SPACE)
 		{
 			if (bitmap.isPlaying)
@@ -182,7 +162,7 @@ class MP4Handler
 				onVLCComplete();
 			}
 		}
-		
+
 		bitmap.volume = FlxG.sound.volume + 0.3; // shitty volume fix. then make it louder.
 
 		if (FlxG.sound.volume <= 0.1)

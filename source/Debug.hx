@@ -368,7 +368,7 @@ class DebugLogWriter
 		#if FEATURE_FILESYSTEM
 		printDebug("Initializing log file...");
 
-		var logFilePath = '$LOG_FOLDER/${Sys.time()}.log';
+		var logFilePath = Main.dataPath() + '$LOG_FOLDER/${Sys.time()}.log';
 
 		// Make sure that the path exists
 		if (logFilePath.indexOf("/") != -1)

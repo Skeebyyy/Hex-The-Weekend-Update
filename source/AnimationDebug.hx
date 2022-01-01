@@ -21,7 +21,7 @@ import flixel.addons.ui.FlxUIInputText;
 import flixel.addons.ui.FlxUINumericStepper;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.addons.ui.FlxUITooltip.FlxUITooltipStyle;
-
+import ui.FlxVirtualPad;
 /**
 	*DEBUG MODE
  */
@@ -52,6 +52,8 @@ class AnimationDebug extends MusicBeatState
 	var offsetY:FlxUINumericStepper;
 
 	var characters:Array<String>;
+	
+	var _pad:FlxVirtualPad;
 
 	public function new(daAnim:String = 'bf')
 	{
@@ -156,6 +158,10 @@ class AnimationDebug extends MusicBeatState
 		add(camFollow);
 
 		FlxG.camera.follow(camFollow);
+		
+		_pad = new FlxVirtualPad(ANIMATION, ANIMATION);
+		_pad.alpha = 0.75;
+		add(_pad);
 
 		super.create();
 	}

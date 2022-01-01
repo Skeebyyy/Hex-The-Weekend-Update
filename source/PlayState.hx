@@ -81,6 +81,10 @@ import openfl.filters.ShaderFilter;
 #if FEATURE_DISCORD
 import Discord.DiscordClient;
 #end
+import openfl.Assets;
+import ui.Mobilecontrols;
+import ui.FlxVirtualPad;
+import ModchartState;
 
 using StringTools;
 
@@ -324,6 +328,12 @@ class PlayState extends MusicBeatState
 	public static var startTime = 0.0;
 
 	// API stuff
+	
+	#if mobileC
+	var mcontrols:Mobilecontrols; 
+	var _pad:FlxVirtualPad;
+	#end
+		
 
 	public function addObject(object:FlxBasic)
 	{
@@ -1256,6 +1266,35 @@ class PlayState extends MusicBeatState
 		scoreTxt.cameras = [camHUD];
 		laneunderlay.cameras = [camNotes];
 		laneunderlayOpponent.cameras = [camNotes];
+		
+		
+		#if mobileC
+			mcontrols = new Mobilecontrols();
+			switch (mcontrols.mode)
+			{
+				case VIRTUALPAD_RIGHT | VIRTUALPAD_LEFT | VIRTUALPAD_CUSTOM:
+					controls.setVirtualPad(mcontrols._virtualPad, FULL, NONE);
+				case HITBOX:
+					controls.setHitBox(mcontrols._hitbox);
+				default:
+			}
+			trackedinputs = controls.trackedinputs;
+			controls.trackedinputs = [];
+
+			_pad = new FlxVirtualPad(NONE, SONGD);
+			_pad.alpha = 0.75;
+			add(_pad);
+
+			var camcontrol = new FlxCamera();
+			FlxG.cameras.add(camcontrol);
+			camcontrol.bgColor.alpha = 0;
+			mcontrols.cameras = [camcontrol];
+			_pad.cameras = [camcontrol];
+
+			mcontrols.visible = false;
+
+			add(mcontrols);
+		#end
 
 		if (isStoryMode)
 		{
@@ -1548,6 +1587,10 @@ class PlayState extends MusicBeatState
 
 	function startCountdown():Void
 	{
+		#if mobileC
+		mcontrols.visible = true;
+		#end
+		
 		Debug.logTrace("start count");
 		inCutscene = false;
 
@@ -3849,6 +3892,11 @@ class PlayState extends MusicBeatState
 
 	function endSong():Void
 	{
+		
+		#if mobileC
+		mcontrols.visible = false;
+		#end
+			
 		endingSong = true;
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, handleInput);
 		FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, releaseInput);

@@ -65,7 +65,6 @@ jobs:
           haxelib run lime config HXCPP_ARM64 true
           haxelib run lime config HXCPP_x86 true
           haxelib install actuate 
-          haxelib run lime rebuild extension-webm android
           haxelib list
           
       - name: Build Log

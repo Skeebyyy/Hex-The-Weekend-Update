@@ -1914,7 +1914,7 @@ class PlayState extends MusicBeatState
 
 	public var previousRate = songMultiplier;
 
-	public var coolingHandler:MP4Handler = null;
+	public var coolingHandler:BrowserVideoPlayer = null;
 
 	function startSong():Void
 	{

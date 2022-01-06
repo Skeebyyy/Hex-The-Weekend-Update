@@ -1,3 +1,4 @@
+#if desktop
 package;
 
 import flixel.graphics.FlxGraphic;
@@ -19,6 +20,8 @@ class MP4Handler
 
 	public var bitmap:VlcBitmap;
 
+	var killed:Bool = false;
+
 	public var sprite:FlxSprite;
 
 	public function new()
@@ -29,6 +32,8 @@ class MP4Handler
 	public function playMP4(path:String, ?repeat:Bool = false, ?outputTo:FlxSprite = null, ?isWindow:Bool = false, ?isFullscreen:Bool = false,
 			?midSong:Bool = false):Void
 	{
+		if (killed)
+			return;
 		if (!midSong)
 		{
 			if (FlxG.sound.music != null)
@@ -49,8 +54,6 @@ class MP4Handler
 			bitmap.set_width(FlxG.stage.stageWidth);
 			bitmap.set_height(FlxG.stage.stageWidth / (16 / 9));
 		}
-		
-		
 
 		bitmap.onVideoReady = onVLCVideoReady;
 		bitmap.onComplete = onVLCComplete;
@@ -95,6 +98,8 @@ class MP4Handler
 
 	function onVLCVideoReady()
 	{
+		if (killed)
+			return;
 		Debug.logTrace("video loaded!");
 
 		if (sprite != null && !bitmap.isDisposed && bitmap.bitmapData != null)
@@ -124,6 +129,8 @@ class MP4Handler
 
 	public function onVLCComplete()
 	{
+		if (killed)
+			return;
 		bitmap.stop();
 
 		// Clean player, just in case! Actually no.
@@ -152,6 +159,7 @@ class MP4Handler
 
 	public function kill()
 	{
+		killed = true;
 		bitmap.stop();
 
 		if (finishCallback != null)
@@ -164,6 +172,8 @@ class MP4Handler
 
 	function onVLCError()
 	{
+		if (killed)
+			return;
 		if (finishCallback != null)
 		{
 			finishCallback();
@@ -176,17 +186,12 @@ class MP4Handler
 
 	function update(e:Event)
 	{
-		if (FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.SPACE)
-		{
-			if (bitmap.isPlaying)
-			{
-				onVLCComplete();
-			}
-		}
-		
+		if (killed)
+			return;
 		bitmap.volume = FlxG.sound.volume + 0.3; // shitty volume fix. then make it louder.
 
 		if (FlxG.sound.volume <= 0.1)
 			bitmap.volume = 0;
 	}
 }
+#end

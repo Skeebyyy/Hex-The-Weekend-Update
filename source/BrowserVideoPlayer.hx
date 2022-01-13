@@ -44,5 +44,10 @@ class BrowserVideoPlayer
 		if (url == 'http://exitme/') 
                          onClose(); // drity hack lol
 	}
+
+	public function kill()
+	{
+                onClose();
+	}
 }
-#end//only for android
+#end//only for android and ios
